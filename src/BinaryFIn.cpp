@@ -57,9 +57,9 @@ void BinaryFIn::fill_buffer(){
     file >> std::noskipws >> input;
 
     // 10 is newline constant; skip
-    while(input == 10){
-        file >> std::noskipws >> input;
-    }
+    // while(input == 10){
+    //     file >> std::noskipws >> input;
+    // }
 
     buffer = input;
     n = 8;
