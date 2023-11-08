@@ -22,14 +22,14 @@ BinaryFIn::BinaryFIn(){
 void BinaryFIn::initialize(std::string file_name){
     /**
      * Private member for initializing the object
-     * Opens the given file in ios::in mode
+     * Opens the given file in ios::binary mode
      * Sets buffer and number of bits to 0
      * Marks as initialized
      * 
      * @param file_name Name of file to open
     */
 
-    file.open(file_name, std::ios::in);
+    file.open(file_name, std::ios::binary);
 
     // Ensure that file was successfully opened
     if(!file.is_open()){
@@ -53,15 +53,10 @@ void BinaryFIn::fill_buffer(){
      * Assumes will NOT be called when already at EOF
     */
 
-    unsigned char input;
-    file >> std::noskipws >> input;
+    char input;
+    file.get(input);
 
-    // 10 is newline constant; skip
-    // while(input == 10){
-    //     file >> std::noskipws >> input;
-    // }
-
-    buffer = input;
+    buffer = static_cast<char>(input);
     n = 8;
     if(file.eof()) at_eof = true;
 }
@@ -74,6 +69,10 @@ void BinaryFIn::close(){
 
     try{
         file.close();
+        is_initialized = false;
+        n = -1;
+        buffer = -1;
+        at_eof = false;
     }
     catch(const std::ifstream::failure& e){
        std::cout << "Failed to close file\n" << e.what() << std::endl; 
@@ -209,7 +208,7 @@ long BinaryFIn::read_long(){
     return c;
 }
 
-int BinaryFIn::read_r(int r){
+int BinaryFIn::read_r(const int r){
     /**
      * Gets the next r bits of data from file as
      * 32-bit int
@@ -268,4 +267,15 @@ std::string BinaryFIn::read_string(){
     }
 
     return c;
+}
+
+bool BinaryFIn::get_eof(){
+    /**
+     * Public getter method to return end-of-file
+     * (EOF) flag status
+     * 
+     * @returns EOF flag
+    */
+
+    return at_eof;
 }

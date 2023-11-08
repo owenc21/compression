@@ -19,6 +19,7 @@ class BinaryFIn{
        BinaryFIn();
        void initialize(std::string file_name);
        void close();
+       bool get_eof();
        char read_char();
        short read_short();
        int read_int();
