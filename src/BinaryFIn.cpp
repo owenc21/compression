@@ -29,7 +29,7 @@ void BinaryFIn::initialize(std::string file_name){
      * @param file_name Name of file to open
     */
 
-    file.open(file_name, std::ios::binary);
+    file.open(file_name, std::ios::in|std::ios::binary);
 
     // Ensure that file was successfully opened
     if(!file.is_open()){
@@ -44,6 +44,7 @@ void BinaryFIn::initialize(std::string file_name){
     n = 0;
     buffer = 0;
     is_initialized = true;
+    at_eof = false;
 }
 
 void BinaryFIn::fill_buffer(){
@@ -54,7 +55,7 @@ void BinaryFIn::fill_buffer(){
     */
 
     char input;
-    file.get(input);
+    file.read(reinterpret_cast<char *>(&input), sizeof input);
 
     buffer = static_cast<char>(input);
     n = 8;
@@ -92,10 +93,14 @@ char BinaryFIn::read_bit(){
         throw(std::ifstream::failure("At end of file"));
     }
 
+    // If buffer empty, fill it
+    if(n == 0) fill_buffer();
+
+    --n;
     char c = (buffer >> n) & 0x1;
     if(n == 0){
         n = 8;
-        fill_buffer();
+        if(!at_eof) fill_buffer();
     }
     return c;
 }
@@ -113,12 +118,15 @@ char BinaryFIn::read_char(){
         throw(std::ifstream::failure("At end of file"));
     }
 
-    int c = 0; // need signed type for arithmetic right shift
+    unsigned char c = 0; // need unsigned type for arithmetic right shift
+
+    // If buffer empty, fill it
+    if(n == 0) fill_buffer();
 
     // Check case for perfect bit-alignment
     if(n == 8){
         c = buffer;
-        fill_buffer();
+        if(!at_eof) fill_buffer();
         return c;
     }
 
@@ -127,9 +135,6 @@ char BinaryFIn::read_char(){
     c = buffer;
     c <<= offset;
     fill_buffer();
-    if(at_eof){
-        throw(std::ifstream::failure("At end of file"));
-    }
     n = 8-offset; // set n to old value
     c |= buffer >> n; // only want upper offset bits of buffer
 
