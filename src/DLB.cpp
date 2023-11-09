@@ -84,6 +84,19 @@ void DLB::put(std::string s, int key){
     }
 }
 
+void DLB::put(char c, int key){
+    /**
+     * Overloaded member for inserting a single
+     * char into the trie with a given key
+     * 
+     * @param c char to insert into trie
+     * @param key   Key (int) to map char to in trie
+    */
+
+    std::string s(1, c);
+    put(s, key);
+}
+
 std::string DLB::longest_prefix_of(std::string s){
     /**
      * Given a string, returns longest string in trie

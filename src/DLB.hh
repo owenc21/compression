@@ -1,5 +1,5 @@
-#ifndef LZW_DLB
-#define LZW_DLB
+#ifndef DLB_COMP
+#define DLB_COMP
 
 #include <string>
 #include <memory>
@@ -23,6 +23,7 @@ class DLB{
     public:
         DLB();
         void put(std::string s, int key); // Put s into trie with key
+        void put(char c, int key); // Put c into trie with key
         std::string longest_prefix_of(std::string s); // Prefix match with string s
         int get(std::string s); // Get key for string s
 };
