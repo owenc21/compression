@@ -26,7 +26,8 @@ class BinaryFOut{
         void write(int w, int r); // write w which has r bits
         void write(int qbyte); // write 32 bits (4 bytes or "q"uad byte)
         void write(long obyte); // write 64 bits (8 bytes or "o"cto byte)
-
+        void write(std::string s, int r); // write string s of r-bit characters
+        void write(std::string s); // write string s of 8-bit characters
 };
 
 #endif

@@ -227,3 +227,31 @@ void BinaryFOut::write(int c, int r){
         write_bit(bit);
     }
 }
+
+void BinaryFOut::write(std::string s, int r){
+    /**
+     * Public member to write string with character size
+     * of a given bit length
+     * 
+     * @param s String to write to buffer
+     * @param r int specifying bit-width of characters in s
+    */
+
+    for(int i=0; i<s.length(); i++){
+        write(s.at(i), r);
+    }
+}
+
+
+void BinaryFOut::write(std::string s){
+    /**
+     * Public member to write string of 8-bit characters
+     * to file
+     * 
+     * @param s String to write to buffer
+    */
+
+    for(int i=0; i<s.length(); ++i){
+        write(s.at(i));
+    }
+}
